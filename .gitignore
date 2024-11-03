@@ -6,6 +6,7 @@ __pycache__/
 # C extensions
 *.so
 *.tar.gz
+*.txt.gz
 
 # Distribution / packaging
 .Python
@@ -22,6 +23,7 @@ sdist/
 var/
 wheels/
 share/python-wheels/
+temp/
 *.egg-info/
 .installed.cfg
 *.egg
