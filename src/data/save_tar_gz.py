@@ -1,5 +1,5 @@
 import os
-from src.scripts.load_data import load_data
+from src.data.load_data import load_data
 
 def tar_gz_to_csv(load_path, save_path, load_text=False):
     data_sets = load_data(load_path, bool_load_txt=load_text)

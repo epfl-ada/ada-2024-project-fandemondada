@@ -19,6 +19,7 @@ def load_data(path, bool_load_txt = False):
     outputs:
         - data: dictionary containing the dataframes
     """
+    temp_path =  "temp/" 
     data = {}
     for folder in os.listdir(path):
         if folder.endswith('.tar.gz'):
@@ -31,15 +32,16 @@ def load_data(path, bool_load_txt = False):
                     data[folder[:-7] + "_" + file.name] = pd.read_csv(f)
                 
                 if file.name.endswith(".txt.gz") and bool_load_txt:
-                    newpath = "temp/" 
+                    # one folder per tar file
+                    newpath = temp_path + folder[:-7] + "/"
                     if not os.path.exists(newpath):
                         os.makedirs(newpath)
                     list_tar_files.extract(file, path=newpath)
                     load_txt(newpath + "/" + file.name)
                     data[folder[:-7] + "_" + file.name[:-7] + ".csv"] = pd.read_csv(newpath + "/" + file.name[:-7] + ".csv")
-            
-            if bool_load_txt:
-                shutil.rmtree(newpath)
+
+    if bool_load_txt:
+        shutil.rmtree(temp_path)
     return data
 
 def load_txt(file_path):
