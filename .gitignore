@@ -171,6 +171,9 @@ cython_debug/
 # all clean data files have to be named *clean.csv
 !*clean.csv
 
+# still push csv from Census
+!/data/raw/Census/*.csv
+
 *.txt
 # execption for requirements
 !pip_requirements.txt
