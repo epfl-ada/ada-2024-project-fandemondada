@@ -9,7 +9,8 @@ Finally, we will try to find some correlations between the beers we just found a
 -	Based on the origin of the beers reviewed, what is the beer most produced in a state? Is it also the most liked? We will use the absolute number of beers coming from the state and not the volume produced.
 -	Can we find a correlation between the beers we just found and the political orientation of the states? Is it possible to find out the “standard” democrat beer and the “standard” republican one?
 ## Additional dataset:
-TO DO
+For the period from 2000 to 2010 and 2010 to 2020
+[Rural and urban population proportions](https://data.census.gov/table/DECENNIALCD1182020.H2?q=rural)
 ## Methods:
 TO DO
 ## Proposed timeline:
