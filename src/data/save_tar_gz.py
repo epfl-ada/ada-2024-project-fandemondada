@@ -17,6 +17,9 @@ def tar_gz_to_csv(load_path, save_path, load_text=False):
             path = os.path.join(save_path, matched_path)
         if not os.path.exists(path):
             os.makedirs(path)
-        data_sets[data].to_csv(os.path.join(path, data))
+        
+        csv_path = os.path.join(path, data)
+        if not os.path.exists(csv_path): #check if files already exist
+            data_sets[data].to_csv(csv_path)
 
     return data_sets
