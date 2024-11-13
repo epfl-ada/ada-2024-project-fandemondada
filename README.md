@@ -1,7 +1,7 @@
 
-# Beers and the USA: a study on American beer consumption
+# Beers in the USA: a societal study on American beer consumption
 ## Abstract: 
-In this period of deep political turmoil in the USA, symptom of a country more divided than ever, we want to find out if this  division can also be found in the beers drunk. In this project, we will investigate the links between multiple demographic metrics of the American states and beer consumption and production in them.
+In this period of deep political turmoil in the USA, symptom of a country more divided than ever, we want to find out if this division can also be found in the beers drunk. In this project, we will investigate the links between multiple demographic metrics of the American states and beer consumption and production in them.
 
 Specifically, we will begin by deep diving into each State’s favourite beers based on RateBeer and BeerAdvocate reviews and find out which beers represents the state the best. In parallel, we will look into what beers are being produced in each State to discover the one most representative of it.
 
@@ -11,61 +11,18 @@ Finally, we will try to find some correlations between the beers we just found a
 -	Based on the origin of the beers reviewed, what is the beer most produced in a state? Is it also the most liked? We will use the absolute number of beers coming from the state and not the volume produced.
 -	Can we find a correlation between the beers we just found and some demographic metrics of the states? Is it possible to find out some beers most representative of each metrics?
 ## Additional dataset:
-For the period from 2000 to 2010 and 2010 to 2020
-[Rural and urban population proportions](https://data.census.gov/table/DECENNIALCD1182020.H2?q=rural)
+[Rural and urban population proportions](https://data.census.gov/table/DECENNIALCD1182020.H2?q=rural) Periods 2000 - 2010 and 2010 - 2020
 ## Methods:
 TO DO
 ## Proposed timeline:
-TO DO
+- Week 10 - Data analysis: analyse the beer data and combine it with the data from the additional datasets in meaningful ways regarding the research questions
+- Week 11 - Homework 2: take care of the homework, do some more data analysis
+- Week 12 - Concept of the Data Story: do some more data analysis, look at what the data has been telling us and decide what to present and how to do it
+- Week 13 - Begin the website: finish the last data analysis, create the first graphics and start the text
+- Week 14 - Milestone 3 : finish the data story and clean up the code 
 ## Organisation within the team:
-| Vassiliy Cheremetiev | Patrick Gilliard             | Felix Schmeding    | John Taylor    | Alex Zanetta                     |
-|----------------------|------------------------------|--------------------|----------------|----------------------------------|
-| Data analysis        | Additional database handling | Coffee + good mood | Data wrangling | Data loading + data storytelling |
-## Questions for TAs:
-TO DO
+| Vassiliy Cheremetiev | Patrick Gilliard | Felix Schmeding    | John Taylor | Alex Zanetta      |
+|----------------------|------------------|--------------------|-------------|-------------------|
+| Data analysis        | Website          | Coffee + good mood | Homework 2  | Data storytelling |
 
-## Quickstart
-
-```bash
-# clone project
-git clone <project link>
-cd <project repo>
-
-# [OPTIONAL] create conda environment
-conda create -n <env_name> python=3.11 or ...
-conda activate <env_name>
-
-
-# install requirements
-pip install -r pip_requirements.txt
-```
-
-
-
-### How to use the library
-Tell us how the code is arranged, any explanations goes here.
-
-
-
-## Project Structure
-
-The directory structure of new project looks like this:
-
-```
-├── data                        <- Project data files
-│
-├── src                         <- Source code
-│   ├── data                            <- Data directory
-│   ├── models                          <- Model directory
-│   ├── utils                           <- Utility directory
-│   ├── scripts                         <- Shell scripts
-│
-├── tests                       <- Tests of any kind
-│
-├── results.ipynb               <- a well-structured notebook showing the results
-│
-├── .gitignore                  <- List of files ignored by git
-├── pip_requirements.txt        <- File for installing python dependencies
-└── README.md
-```
-
+The roles represent the main responsible for each part, everyone will work on all parts of the project.

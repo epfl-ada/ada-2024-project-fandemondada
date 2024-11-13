@@ -65,3 +65,27 @@ def load_txt(file_path):
         for review in tqdm.tqdm(reviews):
             file.writerow(review.values())
 
+def load_data_from_csv(path):
+    """
+    Load data from .csv files
+    Inputs: path to the data files
+    Outputs: dictionaries containing the dataframes BeerAdvocate, RateBeer and Matched
+    """
+    data_ba = {}
+    data_rb = {}
+    data_matched = {}
+    for folder in os.listdir(path):
+        if 'BeerAdvocate' in folder:
+            for file in os.listdir(path + folder):
+                if file.endswith(".csv"):
+                    data_ba[file] = pd.read_csv(path + folder + "/" + file)
+        if 'RateBeer' in folder:
+            for file in os.listdir(path + folder):
+                if file.endswith(".csv"):
+                    data_rb[file] = pd.read_csv(path + folder + "/" + file)
+        if 'Matched' in folder:
+            for file in os.listdir(path + folder):
+                if file.endswith(".csv"):
+                    data_matched[file] = pd.read_csv(path + folder + "/" + file)
+                    
+    return data_ba, data_rb, data_matched
