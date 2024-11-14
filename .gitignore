@@ -173,6 +173,7 @@ cython_debug/
 
 # still push csv from Census
 !/data/raw/Census/*.csv
+!/data/raw/OPENICPSR/*.csv
 
 *.txt
 # execption for requirements
