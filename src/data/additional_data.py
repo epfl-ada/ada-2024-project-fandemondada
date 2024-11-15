@@ -122,6 +122,7 @@ def loadBEA(path, filename, income_name={}):
         .rename_axis(index={'GeoName': 'State', 'LineCode': 'Income', None: 'Year'})
         .unstack(level=['Income'])            # to get years as index and indicators as columns
         .rename(columns=col_dict)           # rename columns
+        .apply(pd.to_numeric, errors='coerce') 
     )
 
     return df
