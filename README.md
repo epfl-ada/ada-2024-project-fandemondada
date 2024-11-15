@@ -1,5 +1,5 @@
 
-# Beers in the USA: a societal study on American beer consumption
+# Beers in the USA: a prediction of State of origin based on beer tastes
 ## Abstract: 
 In this project, we aim to explore how beer preferences in the United States reflect broader societal trends by leveraging user-generated beer reviews and demographic data. Specifically, we will develop a method to infer a user’s demographic profile—such as state of residence, income, and age—based on their beer ratings.
 
@@ -21,7 +21,15 @@ Finally, we will try to find some correlations between the beers we just found a
 
 ## Additional dataset:
 Each additional dataset will contribute to defining the demographic attributes associated with each state.
-[Rural and urban population proportions](https://data.census.gov/table/DECENNIALCD1182020.H2?q=rural) Periods 2000 - 2010 and 2010 - 2020
+
+U.S. Census Bureau, "URBAN AND RURAL." Decennial Census, DEC 118th Congressional District Summary File (accessed Friday, November 15, 2024)[Link](https://data.census.gov/table/DECENNIALCD1182020.H2?q=rural) This dataset provides the raw number of inhabitants per state living in cities and in the countryside. We have these numbers for the years 2010 and 2020. We wanted to predict wether someone was living in a rural or urban area based on their beer taste, but due to lack of intersting result (prediction was nearly always "urban" due to the vast majority of the American population living in cities), this dataset will most likely not be further used in our project.
+
+U.S. Bureau of Economic Analysis, "SASUMMARY State annual summary statistics: personal income, GDP, consumer spending, price indexes, and employment" (accessed Friday, November 15, 2024)[Link](https://apps.bea.gov/itable/?ReqID=70&step=1#eyJhcHBpZCI6NzAsInN0ZXBzIjpbMSwyOSwyNSwzMSwyNiwyNywzMF0sImRhdGEiOltbIlRhYmxlSWQiLCI2MDAiXSxbIk1ham9yX0FyZWEiLCIwIl0sWyJTdGF0ZSIsWyIwIl1dLFsiQXJlYSIsWyJYWCJdXSxbIlN0YXRpc3RpYyIsWyItMSJdXSxbIlVuaXRfb2ZfbWVhc3VyZSIsIkxldmVscyJdLFsiWWVhciIsWyItMSJdXSxbIlllYXJCZWdpbiIsIi0xIl0sWyJZZWFyX0VuZCIsIi0xIl1dfQ==) This dataset provide various information about the American economy. We have yearly numbers from 1998 to 2023. We are only interested in the state wise income per capita, that will be used to predict the income of someone based on their beer taste.
+
+Ann Arbor MI: Inter-university Consortium for Political and Social Research, Kaplan and Jacob, "Apparent Per Capita Alcohol Consumption: National, State, and Regional Trends 1977-2018" (accessed Friday, November 15, 2024)[Link](https://doi.org/10.3886/E105583V5-82040) This dataset contains various metrics about statewise alcohol consumption. We have yearly numbers from 1977 to 2018. The metrics that we will be using are the number of beers per capita and the beer ethanol per capita. They will be used to predict the yearly quantity of beers drunk based on someones beer tasts.
+
+U.S. Census Bureau, "PROFILE OF GENERAL POPULATION AND HOUSING CHARACTERISTICS." Decennial Census, DEC Demographic Profile (accessed Friday, November 15, 2024)[Link](https://data.census.gov/table/DECENNIALDP2020.DP1?q=decenial%20census&g=010XX00US$0400000_9500000US5699999) This dataset contains many demographic characteristics, such as sex, race and relationship status. We have statewise number for the year 2020. The metrics most interesting to us is the age, that we will use to predict the age of the user based on their beer taste.
+
 
 ## Methods:
 
