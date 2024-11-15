@@ -20,6 +20,16 @@ def load_icpsr(path):
     return dict_icpsr
 
 def load_urban_frac_df(path, filename):
+    """ loads and cleans datasets from census.org about urban population 
+    Additionnaly calculates the fraction of urban population
+
+    Args:
+        path (string): path where the raw dataset is saved
+        filename (string): filename of csv file
+
+    Returns:
+        pd.df: dataframe with urban_pop, rural_pop, urban_frac data per US-state
+    """
     urban_df = pd.read_csv(path + filename, index_col=0)
     # delete inside urban clusters and urbanized
     if len(urban_df.index) == 6:
