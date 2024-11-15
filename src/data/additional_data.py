@@ -12,7 +12,7 @@ def load_icpsr(path):
     df = df[df['year'].isin(years)]
     #make the first letter of the state column uppercase
     df['state'] = df['state'].str.capitalize()
-    df = df[['year', 'state', 'ethanol_spirit_gallons_per_capita', 'number_of_beers']]
+    df = df[['year', 'state', 'ethanol_beer_gallons_per_capita', 'number_of_beers']]
     #separate the data by year, and use the year as key in dictionnary
     for year in years:
         dict_icpsr[str(year)] = df[df['year'] == year].drop(columns=['year']).reset_index(drop=True)
