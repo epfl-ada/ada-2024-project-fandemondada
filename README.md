@@ -18,8 +18,11 @@ Finally, we will try to find some correlations between the beers we just found a
 
 3. **How can demographic data, such as age, income, and state population trends, be combined with beer grading patterns to generate a user’s profile?**  
    We will explore the relationship between state-specific beer preferences and demographic metrics to create meaningful user identities.
+
 ## Additional dataset:
+Each additional dataset will contribute to defining the demographic attributes associated with each state.
 [Rural and urban population proportions](https://data.census.gov/table/DECENNIALCD1182020.H2?q=rural) Periods 2000 - 2010 and 2010 - 2020
+
 ## Methods:
 
 Our analysis consists of several stages, including data preprocessing, beer representativeness analysis, demographic correlation analysis, and data visualization. Below is an outline of each step:
