@@ -96,3 +96,32 @@ def load_age_data(path, load_gender=False):
         df_male = pd.concat([df['state'], df.iloc[:, 22:37]], axis=1)
         df_female = pd.concat([df['state'], df.iloc[:, 43:58]], axis=1)
         return df_total, df_male, df_female
+
+def loadBEA(path, filename, income_name={}):
+    """loads and arranges csv from BEA containing info about incomes per state and years
+
+    Args:
+        path (string): path where the raw dataset is saved
+        filename (string): filename of csv file
+        income_name (dict): dict with name for the Income type (String : int (1 to 15))
+
+    Returns:
+        pd.df: loaded dataframe, multiindex ['State', 'Year'] and one column per indicator
+    """
+
+    col_dict = {v: k for k, v in income_name.items()}
+
+    df = pd.read_csv(path+filename, header=3)
+
+    df = (
+        df 
+        .set_index(['GeoName', 'LineCode'])   # creating multiindex
+        .drop(['GeoFips', 'Description'], axis=1)   # are redundant
+        .dropna(axis=0, thresh=3)               # both indexes
+        .stack()                           
+        .rename_axis(index={'GeoName': 'State', 'LineCode': 'Income', None: 'Year'})
+        .unstack(level=['Income'])            # to get years as index and indicators as columns
+        .rename(columns=col_dict)           # rename columns
+    )
+
+    return df

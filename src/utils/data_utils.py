@@ -25,3 +25,17 @@ def remove_txt_columns(data_ba, data_rb, data_matched):
         if 'text' in data_matched[key].columns:
             data_matched[key] = data_matched[key].drop(columns=['text'])
     return 
+
+def get_mutliIndex_sub_df(df, income_index,  years):  
+    """helper function to slice a multiindex df. income_index is the second level and years are in a single level column index
+
+    Args:
+        df (pd.df): dataframe to slice
+        income_index (list or single item): list of indexes of the second level to extract
+        years (list or single item): list of column names to extract from df
+
+    Returns:
+        pd.df: the extracted datafram
+    """
+    idx = pd.IndexSlice
+    return df.loc[idx[:, years], income_index]
