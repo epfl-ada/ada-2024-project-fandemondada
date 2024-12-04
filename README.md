@@ -9,7 +9,7 @@ The results of this study will be showcased in an interactive data story, deploy
 
 Finally, we will try to find some correlations between the beers we just found and the diverse demographic metrics previously chosen.
 
-## Research questions:
+## Research questions: **[BETTER FORMULATION, AND MORE DETAILED]**
 1. **How do beer grading patterns differ across states in the United States?**  
    By analyzing user reviews, we aim to uncover state-specific preferences in beer styles, characteristics, and ratings.
 
@@ -40,7 +40,7 @@ Our analysis consists of several stages, including data preprocessing, beer repr
 - Categorize and summarize the grading trends per state, creating a profile of beer preferences for each state.
 
 ### 2. Creating a Grading-Based State Association Formula
-- Develop a mathematical formula that maps a user's grades of 5 specific beers to a proportional affinity for each state.  
+- Develop a **mathematical formula** **[MORE DETAIL, CLUSTERING? REGRESSION? ...?]** that maps a user's grades of 5 specific beers to a proportional affinity for each state.  
   - Use state-level beer grade profiles as the baseline for comparison.
   - Normalize the user’s grading pattern against state profiles to estimate their connection to each state.
 

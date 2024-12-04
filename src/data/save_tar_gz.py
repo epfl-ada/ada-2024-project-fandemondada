@@ -11,7 +11,7 @@ def tar_gz_to_csv(load_path, save_path, load_text=False):
         load_text (bool, optional): If the text reviews should also be extracted. Takes much longer. Defaults to False.
 
     Returns:
-        list[pd.df]: list of all the df extracted
+        dict[pd.df]: dictionnary with all the df extracted
     """
     data_sets = load_data(load_path, bool_load_txt=load_text)
     ratebeer_path = 'RateBeer'

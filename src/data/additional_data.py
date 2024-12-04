@@ -12,7 +12,7 @@ def load_icpsr(path):
     df = df[df['year'].isin(years)]
     #make the first letter of the state column uppercase
     df['state'] = df['state'].str.capitalize()
-    df = df[['year', 'state', 'ethanol_spirit_gallons_per_capita', 'number_of_beers']]
+    df = df[['year', 'state', 'ethanol_beer_gallons_per_capita', 'number_of_beers']]
     #separate the data by year, and use the year as key in dictionnary
     for year in years:
         dict_icpsr[str(year)] = df[df['year'] == year].drop(columns=['year']).reset_index(drop=True)
@@ -96,3 +96,33 @@ def load_age_data(path, load_gender=False):
         df_male = pd.concat([df['state'], df.iloc[:, 22:37]], axis=1)
         df_female = pd.concat([df['state'], df.iloc[:, 43:58]], axis=1)
         return df_total, df_male, df_female
+
+def loadBEA(path, filename, income_name={}):
+    """loads and arranges csv from BEA containing info about incomes per state and years
+
+    Args:
+        path (string): path where the raw dataset is saved
+        filename (string): filename of csv file
+        income_name (dict): dict with name for the Income type (String : int (1 to 15))
+
+    Returns:
+        pd.df: loaded dataframe, multiindex ['State', 'Year'] and one column per indicator
+    """
+
+    col_dict = {v: k for k, v in income_name.items()}
+
+    df = pd.read_csv(path+filename, header=3)
+
+    df = (
+        df 
+        .set_index(['GeoName', 'LineCode'])   # creating multiindex
+        .drop(['GeoFips', 'Description'], axis=1)   # are redundant
+        .dropna(axis=0, thresh=3)               # both indexes
+        .stack()                           
+        .rename_axis(index={'GeoName': 'State', 'LineCode': 'Income', None: 'Year'})
+        .unstack(level=['Income'])            # to get years as index and indicators as columns
+        .rename(columns=col_dict)           # rename columns
+        .apply(pd.to_numeric, errors='coerce') 
+    )
+
+    return df

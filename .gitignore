@@ -175,6 +175,7 @@ cython_debug/
 !/data/raw/Census/*.csv
 !/data/raw/OPENICPSR/*.csv
 !/data/raw/GeneralPopulationAge/*.csv
+!/data/raw/IncomeBEA/*.csv
 
 *.txt
 # execption for requirements
