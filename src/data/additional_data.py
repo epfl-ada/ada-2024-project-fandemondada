@@ -82,6 +82,7 @@ def load_age_data(path, load_gender=False):
     df.columns.values[0] = 'state'
     #remove all unwanted characters
     df.columns = df.columns.str.strip() #remove spaces at beginning and end of columns
+    pd.set_option('future.no_silent_downcasting', True)
     df = df.replace(',', '', regex=True)
     df = df.replace('!!', ' ', regex=True)
     df = df.drop(columns=['SEX AND AGE', 'VACANCY RATES', 'HOUSING TENURE', 'Under 5 years', '5 to 9 years', '10 to 14 years', '15 to 19 years'])
