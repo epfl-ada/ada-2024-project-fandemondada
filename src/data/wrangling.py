@@ -51,6 +51,11 @@ def filter_only_americans(df):
 def filter_by_users(df, users):
     return df[df["user_id"].isin(users["user_id"])]
 
+def remove_links(df):
+    for index, column in df.iterrows():
+        if "<" in df["location"][index]:
+            df["location"][index] = df["location"][index].split("<")[0]
+
 
 def extract_nan_as_column(df, column_name, replace_value=0):
     """
@@ -180,6 +185,7 @@ def clean_beer_advocate(
     
     # Clean breweries not much to do here as there are no missing values
     brewery_ba = pd.read_csv(raw_data_path + "/BeerAdvocate_breweries.csv")
+    remove_links(brewery_ba)
     with open(clean_data_path + "/breweries.csv", "w") as f:
         brewery_ba.to_csv(f, index=False)
         
