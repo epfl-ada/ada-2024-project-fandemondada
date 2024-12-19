@@ -9,6 +9,79 @@ common_replacements = {
     "Ã€": "À", "Ã©": "é", "Ã³": "ó", "Ã": "Í", "â": "'", "Ã": "ß", "": "'",
 }
 
+def clean_data(data_path, clean_load=False):
+    """
+    Clean data for BeerAdvocate, RateBeer, and Matched datasets and generates the corresponding usa restriced dataset and saves them as .
+    
+    Parameters:
+    - raw_data_path: The root directory containing raw data folders.
+    - clean_data_path: The root directory where cleaned data will be saved.
+    - clean_load: If False, skips cleaning datasets if cleaned files already exist.
+    """
+    clean_dataset(data_path, 'BeerAdvocate', clean_load=clean_load,)
+    
+    #clean_dataset(data_path, 'Ratebeer', clean_load=clean_load,)
+    
+    #clean_dataset(data_path, 'Matched', clean_load=clean_load)
+
+def clean_dataset(data_path, dataset_name, clean_load=False):
+    """
+    Clean the BeerAdvocate data stored at raw_data_path and save it in the clean_data_path.
+    """
+
+    full_data_path = os.path.join(data_path, dataset_name)
+
+    # Ensure the clean data folder exists
+    os.makedirs(full_data_path, exist_ok=True)
+
+    # Clean users
+    usa_users_path = os.path.join(full_data_path, "usa_users.csv")
+    if clean_load or not os.path.exists(usa_users_path):
+        users = pd.read_csv(os.path.join(full_data_path, dataset_name + "_users.csv"), low_memory=False)
+        if dataset_name == 'Matched': 
+            users = matched_data_common_clean(users)
+        us_users = filter_only_americans(users.dropna(subset=["user_name", "location"]))
+        extract_nans_as_columns_df(us_users, numerical_columns(us_users), replace_value=0)
+        extract_nans_as_columns_df(us_users, string_columns(us_users), replace_value="")
+        us_users.to_csv(usa_users_path, index=False)
+        del users, us_users
+
+    # Clean ratings
+    usa_ratings_path = os.path.join(full_data_path, "usa_ratings.csv")
+    if clean_load or not os.path.exists(usa_ratings_path):
+        ratings = pd.read_csv(os.path.join(full_data_path, dataset_name + "_ratings.csv"), low_memory=False)
+        if dataset_name == 'Matched': 
+            ratings = matched_data_common_clean(ratings)
+            ratings.drop(columns=["ba_text", "ba_review", "ba_text_nan", "rb_text"], inplace=True)
+        ratings.drop(columns=["text", "review"], inplace=True)
+        ratings = ratings.dropna(subset=["user_id", "beer_id"])
+        ratings = clean_ratings(ratings)
+        us_ratings = filter_by_users(ratings, pd.read_csv(usa_users_path))
+        us_ratings.to_csv(usa_ratings_path, index=False)
+        del ratings, us_ratings
+
+    # Clean beers
+    beers_path = os.path.join(full_data_path, "beers.csv")
+    if clean_load or not os.path.exists(beers_path):
+        beer = pd.read_csv(os.path.join(full_data_path, dataset_name + "_beers.csv"), low_memory=False)
+        if dataset_name == 'Matched': 
+            beer = matched_data_common_clean(beer)
+        extract_nans_as_columns_df(beer, numerical_columns(beer), replace_value=0)
+        extract_nans_as_columns_df(beer, string_columns(beer), replace_value="")
+        beer = replace_common_enc_errors(beer)
+        beer.to_csv(beers_path, index=False)
+        del beer
+
+    # Clean breweries
+    breweries_path = os.path.join(full_data_path, "breweries.csv")
+    if clean_load or not os.path.exists(breweries_path):
+        brewery = pd.read_csv(os.path.join(full_data_path, dataset_name + "_breweries.csv"))
+        if dataset_name == 'Matched': 
+            brewery = matched_data_common_clean(brewery)
+        remove_links(brewery)
+        brewery.to_csv(breweries_path, index=False)
+        del brewery
+
 
 def replace_common_chars(string):
     for key, value in common_replacements.items():
@@ -134,157 +207,3 @@ def matched_data_common_clean(df):
     extract_nans_as_columns_df(df, numerical_columns(df), replace_value=0)
     extract_nans_as_columns_df(df, string_columns(df), replace_value="")
     return df
-
-
-def clean_beer_advocate(
-        raw_data_path,
-        clean_data_path,
-):
-    """
-    Clean the BeerAdvocate data stored at raw_data_path and save it in the clean_data_path
-    """
-    # users
-    users_ba = pd.read_csv(raw_data_path + "/BeerAdvocate_users.csv")
-    
-    # Extract users only from the USA
-    us_users_ba = filter_only_americans(users_ba.dropna(subset=["user_name", "location"]))
-    
-    # Replace missing values with 0 or "" if it is text
-    extract_nans_as_columns_df(us_users_ba, numerical_columns(us_users_ba), replace_value=0)
-    extract_nans_as_columns_df(us_users_ba, string_columns(us_users_ba), replace_value="")
-    
-    # save the cleaned data
-    os.makedirs(clean_data_path, exist_ok=True)
-    with open(clean_data_path + "/usa_users.csv", "w") as f:
-        us_users_ba.to_csv(f, index=False)
-    
-    # ratings
-    
-    ratings_ba = pd.read_csv(raw_data_path + "/BeerAdvocate_ratings.csv")
-    # Remove the reviews as we won't work with them
-    ratings_ba.drop(columns=["text", "review"], inplace=True)
-    ratings_ba = ratings_ba.dropna(subset=["user_id", "beer_id"])
-    ratings_ba = clean_ratings(ratings_ba)
-    us_ratings_ba = filter_by_users(ratings_ba, us_users_ba)
-    
-    # save
-    with open(clean_data_path + "/usa_ratings.csv", "w") as f:
-        us_ratings_ba.to_csv(f, index=False)
-    
-    del ratings_ba; del us_ratings_ba; del users_ba; del us_users_ba
-    
-    beer_ba = pd.read_csv(raw_data_path + "/BeerAdvocate_beers.csv")
-    extract_nans_as_columns_df(beer_ba, numerical_columns(beer_ba), replace_value=0)
-    extract_nans_as_columns_df(beer_ba, string_columns(beer_ba), replace_value="")
-    beer_ba = replace_common_enc_errors(beer_ba)
-    
-    with open(clean_data_path + "/beers.csv", "w") as f:
-        beer_ba.to_csv(f, index=False)
-    
-    del beer_ba
-    
-    # Clean breweries not much to do here as there are no missing values
-    brewery_ba = pd.read_csv(raw_data_path + "/BeerAdvocate_breweries.csv")
-    remove_links(brewery_ba)
-    with open(clean_data_path + "/breweries.csv", "w") as f:
-        brewery_ba.to_csv(f, index=False)
-        
-        
-def clean_ratebeer(
-        raw_data_path,
-        clean_data_path,
-):
-    """
-    Clean the Ratebeer data stored at raw_data_path and save it in the clean_data_path
-    """
-    # Create a clean folder for the Ratebeer data
-    os.makedirs(clean_data_path, exist_ok=True)
-    
-    users_rb = pd.read_csv(raw_data_path + "/Ratebeer_users.csv")
-    # clean users
-    
-    us_users_rb = filter_only_americans(users_rb.dropna(subset=["user_name", "location", "joined"]))
-    
-    with open(clean_data_path + "/usa_users.csv", "w") as f:
-        us_users_rb.to_csv(f, index=False)
-    
-    #Clean ratings
-    ratings_rb = pd.read_csv(raw_data_path + "/Ratebeer_ratings.csv")
-    
-    # Remove the reviews as we won't work with them
-    ratings_rb.drop(columns=["text"], inplace=True)
-    ratings_rb = ratings_rb.dropna(subset=["user_id", "beer_id"])
-    ratings_rb = clean_ratings(ratings_rb)
-
-    us_ratings_rb = filter_by_users(ratings_rb, us_users_rb)
-    with open(clean_data_path + "/usa_ratings.csv", "w") as f:
-        us_ratings_rb.to_csv(f, index=False)
-    
-    del ratings_rb; del us_ratings_rb; del users_rb; del us_users_rb
-    
-    # Clean beers
-    beer_rb = pd.read_csv(raw_data_path + "/Ratebeer_beers.csv")
-    
-    extract_nans_as_columns_df(beer_rb, numerical_columns(beer_rb), replace_value=0)
-    extract_nans_as_columns_df(beer_rb, string_columns(beer_rb), replace_value="")
-    replace_common_enc_errors(beer_rb)
-    
-    with open(clean_data_path + "/beers.csv", "w") as f:
-        beer_rb.to_csv(f, index=False)
-    
-    del beer_rb
-    
-    brewery_rb = pd.read_csv(raw_data_path + "/Ratebeer_breweries.csv")
-    with open(clean_data_path + "/breweries.csv", "w") as f:
-        brewery_rb.to_csv(f, index=False)
-        
-def clean_matched_data(
-        raw_data_path,
-        clean_data_path,
-):
-    """
-    Clean the matched data and save it in the clean_data_path
-    """
-    users = pd.read_csv(raw_data_path + "/matched_beer_data_users.csv", low_memory=False)
-    ratings = pd.read_csv(raw_data_path + "/matched_beer_data_ratings.csv", low_memory=False)
-    beers = pd.read_csv(raw_data_path + "/matched_beer_data_beers.csv", low_memory=False)
-    breweries = pd.read_csv(raw_data_path + "/matched_beer_data_breweries.csv", low_memory=False)
-    users_approx = pd.read_csv(raw_data_path + "/matched_beer_data_users_approx.csv", low_memory=False)
-    
-    # Create a clean folder for the matched data
-    os.makedirs(clean_data_path, exist_ok=True)
-    
-    # clean matched users
-    users = matched_data_common_clean(users)
-    us_states = users[users["ba_location"].str.contains(",")]["ba_location"].unique()
-    us_users = users[users["ba_location"].isin(us_states)]
-    
-    with open(clean_data_path + "/usa_users.csv", "w") as f:
-        us_users.to_csv(f, index=False)
-    
-    # clean matched users_approx
-    users_approx = matched_data_common_clean(users_approx)
-    us_users_approx = users_approx[users_approx["ba_location"].isin(us_states)]
-    
-    with open(clean_data_path + "/usa_users_approx.csv", "w") as f:
-        us_users_approx.to_csv(f, index=False)
-    
-    # clean matched ratings
-    ratings = matched_data_common_clean(ratings)
-    # Remove the reviews as we won't work with them
-    ratings.drop(columns=["ba_text", "ba_review", "ba_text_nan", "rb_text"], inplace=True)
-    extract_nans_as_columns_df(ratings, numerical_columns(ratings), replace_value=0)
-    extract_nans_as_columns_df(ratings, string_columns(ratings), replace_value="")
-    
-    with open(clean_data_path + "/ratings.csv", "w") as f:
-        ratings.to_csv(f, index=False)
-    
-    # clean matched beers
-    beers = matched_data_common_clean(beers)
-    with open(clean_data_path + "/beers.csv", "w") as f:
-        beers.to_csv(f, index=False)
-    
-    # clean matched breweries
-    breweries = matched_data_common_clean(breweries)
-    with open(clean_data_path + "/breweries.csv", "w") as f:
-        breweries.to_csv(f, index=False)
