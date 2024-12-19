@@ -119,3 +119,19 @@ def get_ba_beer_merged():
     ba_usa_ratings['date'] = ba_usa_ratings['date'].apply(lambda timestamp: datetime.fromtimestamp(timestamp).date())
     # datetime.fromtimestamp(timestamp) 
     return ba_usa_ratings
+
+def get_states_from_df(df):
+    """
+    Get the unique state names from a df with the United States, prefix
+    """
+    states = df[df["location"].str.contains("United States,")]["location"].map(lambda x: x.replace("United States, ", "")).unique()
+    return states
+
+def merge_ratings_breweries(ratings_df, breweries_df):
+    """
+    Merge the ratings and breweries with new columns: brewery_state and user_state
+    """
+    merged_df = ratings_df.merge(breweries_df[['brewery_id', 'state']], on='brewery_id', how='left')
+    merged_df = merged_df.rename(columns={'state_x': 'user_state', 'state_y': 'brewery_state'})
+    merged_df = merged_df[~merged_df["brewery_state"].str.contains("<a href")]
+    return merged_df
