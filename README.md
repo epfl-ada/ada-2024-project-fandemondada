@@ -1,26 +1,20 @@
-
-# Beers in the USA: a prediction of State of origin based on beer tastes
+# Favoring local beers: a study on the evolution of american beer consumption
 ## Abstract: 
-In this project, we aim to explore how beer preferences in the United States reflect broader societal trends by leveraging user-generated beer reviews and demographic data. Specifically, we will develop a method to infer a user’s demographic profile—such as state of residence, income, and age—based on their beer ratings.
+In this project, we aim to explore how beer consumption in the United States reflect broader societal trends by leveraging user-generated beer reviews. Specifically, we will look into the evolution of the distance between the place of brewing and the place of consumption of the beer.
 
-The analysis will proceed in three stages. First, we will aggregate beer reviews by state to identify grading patterns unique to each state. Next, we will construct a formula that maps a user’s ratings of a small set of beers to a proportional affiliation with each state. Finally, we will combine these affiliations with demographic data to estimate the user’s profile based on the average characteristics of the identified states.
+The analysis will proceed in three stages. First, we will aggregate beer reviews by state to identify the variation in local, national and foreign beer consumption unique to each state. Next, we will compute the statewise average of the distance between the brewing and drinking place. Finally, we will look at their evolution over time and try to explain it.
 
-The results of this study will be showcased in an interactive data story, deployed on a public website, allowing users to input their beer ratings and receive a personalized demographic profile. This project bridges the gap between cultural preferences and societal data, offering insights into how personal tastes align with demographic patterns.
+The results of this study will be showcased in an interactive data story, deployed on a public, allowing the users to navigate through our thoughts process and reach the same conclusion as us.
 
-Finally, we will try to find some correlations between the beers we just found and the diverse demographic metrics previously chosen.
+## Research questions:
+1. **How does the distance between the place of brewing and of drinking evoluate over time?**  
+   By analysing beer reviews, we aim to uncover clear trends in the evolution of the local consumption.
 
-## Research questions: **[BETTER FORMULATION, AND MORE DETAILED]**
-1. **How do beer grading patterns differ across states in the United States?**  
-   By analyzing user reviews, we aim to uncover state-specific preferences in beer styles, characteristics, and ratings.
-
-2. **Can we accurately infer a user’s proportional affiliation to different states based on their beer ratings?**  
-   We will develop a formula to map individual beer ratings to state-level preferences and assess its effectiveness.
-
-3. **How can demographic data, such as age, income, and state population trends, be combined with beer grading patterns to generate a user’s profile?**  
-   We will explore the relationship between state-specific beer preferences and demographic metrics to create meaningful user identities.
+2. **Can we accurately explain the evolution found?**  
+   We will look for correlations with various data/metrics to explain what we have just found.
 
 ## Additional datasets:
-Each additional dataset will contribute to defining the demographic attributes associated with each state.
+**The additional datasets are not used anymore, as we changed the direction that our project took.**
 
 U.S. Census Bureau, "URBAN AND RURAL." Decennial Census, DEC 118th Congressional District Summary File (accessed Friday, November 15, 2024)[ (link)](https://data.census.gov/table/DECENNIALCD1182020.H2?q=rural): this dataset provides the raw number of inhabitants per state living in cities and in the countryside. We have these numbers for the years 2010 and 2020. We wanted to predict wether someone was living in a rural or urban area based on their beer taste, but due to lack of intersting result (prediction was nearly always "urban" due to the vast majority of the American population living in cities), this dataset will most likely not be further used in our project.
 
@@ -33,42 +27,41 @@ U.S. Census Bureau, "PROFILE OF GENERAL POPULATION AND HOUSING CHARACTERISTICS."
 
 ## Methods:
 
-Our analysis consists of several stages, including data preprocessing, beer representativeness analysis, demographic correlation analysis, and data visualization. Below is an outline of each step:
+Our analysis consists of several stages, including data preprocessing, local consumption analysis, explanations of our results, and data visualization. Below is an outline of each step:
 
-### 1. Aggregating State-Level Beer Grades
-- Analyze the beer review dataset to determine the average grades given to each beer by users in each state.
-- Categorize and summarize the grading trends per state, creating a profile of beer preferences for each state.
+### 1. Statewise local consumption
+- Analyze the beer review dataset to determine the amount of local, national and foreign beers drunk in each state.
 
-### 2. Creating a Grading-Based State Association Formula
-- Develop a **mathematical formula** **[MORE DETAIL, CLUSTERING? REGRESSION? ...?]** that maps a user's grades of 5 specific beers to a proportional affinity for each state.  
-  - Use state-level beer grade profiles as the baseline for comparison.
-  - Normalize the user’s grading pattern against state profiles to estimate their connection to each state.
+### 2. Distance evolution
+- Look into the evolution of the distance between the place of brewing and of consumption of the beer: 
+  - Use state-level average to get more precise results.
+  - Reduce the complexity by considering only monthly results.
 
-### 3. Mapping State Affinity to Demographic Attributes
-- Combine the derived state proportions from the user’s grading with demographic datasets (e.g., rural/urban proportions, income, age distributions, beer consumption).
-- Calculate a synthetic demographic ID for the user based on the weighted averages of state-level demographic attributes.
-- Use this ID to represent the user's inferred demographic and regional profile.
+### 3. Explanation of the results
+- Try to combine the evolution of the distance with diverse pertinent factors, namely:
+   - The evolution of the climate change attitude.
+   - The evolution of the patriotism over time,
+   - The evolution of the number of breweries.
 
 ### 4. Crafting a Data Story and Interactive Website
-- Design an engaging data story that explains the methodology, findings, and societal insights of the analysis.
+- Design an engaging data story that explains the methodology, findings, and insights of the analysis.
 - Develop an interactive website where users can:
-  - Explore visualizations of the state profiles and demographic trends derived from the data.
-  - Input their beer ratings.
-  - Receive a personalized demographic ID based on the analysis.
+  - Explore visualizations of the state profiles derived from the data.
+  - Travel through time with interractive plots.
 
 
 ## Proposed timeline:
 Deadline for each part:
-- 22.11.24 - State-level Beer Grades
+- 22.11.24 - Statewise local consumption
 - 29.11.24 - Homework 2
-- 6.12.24 - Association Formula
-- 13.12.24 - Demographic Attributes
+- 6.12.24 - Distance evolution
+- 13.12.24 - Explanation of the results
 - 20.12.24 - Datastory and Website
   
 ## Organisation within the team:
 
 For each task, a team member will oversee it. He will delegates subtasks to others and ensures all aspects are completed at the assigned deadline.
 
-| Vassiliy Cheremetiev    | Patrick Gilliard    | Felix Schmeding        | John Taylor | Alex Zanetta          |
-|-------------------------|---------------------|------------------------|-------------|-----------------------|
-| State-level Beer Grades | Association Formula | Demographic Attributes | Homework 2  | Datastory and Website |
+| Vassiliy Cheremetiev        | Patrick Gilliard      | Felix Schmeding            | John Taylor | Alex Zanetta            |
+|-----------------------------|-----------------------|----------------------------|-------------|-------------------|
+| Statewise local consumption | Datastory and Website | Explanation of the results | Homework 2  | Distance evolution |
