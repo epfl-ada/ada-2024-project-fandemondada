@@ -9,6 +9,7 @@ import tqdm
 import csv
 import gzip
 import shutil
+from datetime import datetime
 
 def load_data(path, bool_load_txt = False):
     """
@@ -89,3 +90,30 @@ def load_data_from_csv(path):
                     data_matched[file] = pd.read_csv(path + folder + "/" + file)
                     
     return data_ba, data_rb, data_matched
+
+def load_breweries():
+    breweries = pd.read_csv("data/clean/BeerAdvocate/breweries.csv")
+    breweries['location'] = breweries['location'].apply(lambda x: x.replace('United States, ', ''))
+    breweries['state'] = breweries['location'].apply(lambda x: x.split(', ')[-1])
+    breweries.loc[breweries['location'].str.contains('Canada, '), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Ontario'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Quebec'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Nova Scotia'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Manitoba'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('British Columbia'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Alberta'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Newfoundland and Labrador'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('United Kingdom, '), 'location'] = 'United Kingdom'
+    breweries = breweries.rename(columns={'id': 'brewery_id'})
+    
+    return breweries
+
+def get_ba_beer_merged():
+    ba_usa_ratings = pd.read_csv("data/clean/BeerAdvocate/usa_ratings.csv")
+    ba_usa_users = pd.read_csv("data/clean/BeerAdvocate/usa_users.csv")
+
+    ba_usa_ratings = ba_usa_ratings.merge(ba_usa_users[['user_id', 'location']], on='user_id', how='left')
+    ba_usa_ratings['state'] = ba_usa_ratings['location'].apply(lambda x: x.split(', ')[-1])
+    ba_usa_ratings['date'] = ba_usa_ratings['date'].apply(lambda timestamp: datetime.fromtimestamp(timestamp).date())
+    # datetime.fromtimestamp(timestamp) 
+    return ba_usa_ratings
