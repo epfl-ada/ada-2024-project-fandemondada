@@ -93,6 +93,7 @@ def load_data_from_csv(path):
 
 def load_breweries():
     breweries = pd.read_csv("data/clean/BeerAdvocate/breweries.csv")
+    breweries = breweries[~breweries["location"].str.contains("<a href")]
     breweries['location'] = breweries['location'].apply(lambda x: x.replace('United States, ', ''))
     breweries['state'] = breweries['location'].apply(lambda x: x.split(', ')[-1])
     breweries.loc[breweries['location'].str.contains('Canada, '), 'location'] = 'Canada'
@@ -105,6 +106,7 @@ def load_breweries():
     breweries.loc[breweries['location'].str.contains('Newfoundland and Labrador'), 'location'] = 'Canada'
     breweries.loc[breweries['location'].str.contains('United Kingdom, '), 'location'] = 'United Kingdom'
     breweries = breweries.rename(columns={'id': 'brewery_id'})
+    
     
     return breweries
 
