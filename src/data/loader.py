@@ -249,4 +249,48 @@ def loadBEA(path, filename, income_name={}):
     return df
 
 
+def load_breweries():
+    breweries = pd.read_csv("data/clean/BeerAdvocate/breweries.csv")
+    breweries = breweries[~breweries["location"].str.contains("<a href")]
+    breweries['location'] = breweries['location'].apply(lambda x: x.replace('United States, ', ''))
+    breweries['state'] = breweries['location'].apply(lambda x: x.split(', ')[-1])
+    breweries.loc[breweries['location'].str.contains('Canada, '), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Ontario'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Quebec'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Nova Scotia'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Manitoba'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('British Columbia'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Alberta'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('Newfoundland and Labrador'), 'location'] = 'Canada'
+    breweries.loc[breweries['location'].str.contains('United Kingdom, '), 'location'] = 'United Kingdom'
+    breweries = breweries.rename(columns={'id': 'brewery_id'})
+    
+    
+    return breweries
 
+
+def get_ba_beer_merged():
+    ba_usa_ratings = pd.read_csv("data/clean/BeerAdvocate/usa_ratings.csv")
+    ba_usa_users = pd.read_csv("data/clean/BeerAdvocate/usa_users.csv")
+
+    ba_usa_ratings = ba_usa_ratings.merge(ba_usa_users[['user_id', 'location']], on='user_id', how='left')
+    ba_usa_ratings['state'] = ba_usa_ratings['location'].apply(lambda x: x.split(', ')[-1])
+    ba_usa_ratings['date'] = ba_usa_ratings['date'].apply(lambda timestamp: datetime.fromtimestamp(timestamp).date())
+    # datetime.fromtimestamp(timestamp) 
+    return ba_usa_ratings
+
+def get_states_from_df(df):
+    """
+    Get the unique state names from a df with the United States, prefix
+    """
+    states = df[df["location"].str.contains("United States,")]["location"].map(lambda x: x.replace("United States, ", "")).unique()
+    return states
+
+def merge_ratings_breweries(ratings_df, breweries_df):
+    """
+    Merge the ratings and breweries with new columns: brewery_state and user_state
+    """
+    merged_df = ratings_df.merge(breweries_df[['brewery_id', 'state']], on='brewery_id', how='left')
+    merged_df = merged_df.rename(columns={'state_x': 'user_state', 'state_y': 'brewery_state'})
+    merged_df = merged_df[~merged_df["brewery_state"].str.contains("<a href")]
+    return merged_df
