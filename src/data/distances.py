@@ -1,6 +1,7 @@
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import pandas as pd
+import ast
 
 
 geolocator = Nominatim(user_agent="FanDeMondADA")
@@ -130,4 +131,22 @@ def load_distances(clean_folder_path):
     dict_distances = df_distance.to_dict("index")
 
     return dict_distances
+
+def convert_dict_to_table(dict):
+    """ Convert the distance dictionnary to a table
+    Input:
+        - dict: a dict with key a pair of locations and value the distance between them
+    Output:
+        - distance_table: a table containing distance between locations
+    """
+
+    # use ast to interpret the weird string as a tuple
+    new_data = [(*ast.literal_eval(k), v['distance']) for k, v in dict.items()]
+    df = pd.DataFrame(new_data, columns=["place1", "place2", "distance"])
+    distance_table = df.pivot(index='place1', columns='place2', values='distance')
+    distance_table = distance_table.combine_first(distance_table.T)
+    # fill not needed distances with 0
+    distance_table = distance_table.fillna(0)
+    return distance_table
+
 
