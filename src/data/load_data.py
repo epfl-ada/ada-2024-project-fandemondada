@@ -133,5 +133,9 @@ def merge_ratings_breweries(ratings_df, breweries_df):
     Merge the ratings and breweries with new columns: brewery_state and user_state
     """
     merged_df = ratings_df.merge(breweries_df[['brewery_id', 'state']], on='brewery_id', how='left')
+    merged_df = merged_df.dropna(subset=['state_y'])
     merged_df = merged_df.rename(columns={'state_x': 'user_state', 'state_y': 'brewery_state'})
+    columns_to_keep = [col for col in merged_df.columns if 'nan' not in col]
+    merged_df = merged_df[columns_to_keep]
+    merged_df = merged_df.drop(columns='_merge')
     return merged_df
