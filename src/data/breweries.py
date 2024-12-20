@@ -13,9 +13,6 @@ def breweries_first_date(reviews_df, brew_df):
 
 def monthly_new_breweries(brew_df, time_range):
     new_brew = brew_df.value_counts(subset=['year_month'], sort=False).to_frame().reset_index()
-    #new_brew['year_month'] = new_brew['year_month'].dt.to_timestamp()
-    # need to fill gaps to plot later:
-    #new_brew = new_brew.set_index('year_month').resample('ME')
     new_brew = new_brew.rename(columns={0: 'count'})
     
     # Create a DataFrame with all months in the time range
@@ -24,7 +21,6 @@ def monthly_new_breweries(brew_df, time_range):
     # Merge with new_brew to ensure all months are included
     new_brew = all_months.merge(new_brew, on='year_month', how='left').fillna(0)
     
-
     new_brew['cumulative'] = new_brew['count'].cumsum()
     # set year month as index
     new_brew = new_brew.set_index('year_month')

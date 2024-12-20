@@ -182,7 +182,7 @@ def get_countries_code():
             'Wyoming': 'WY'}
 
     # source of the file "all.csv" with all the country codes: https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes/blob/master/all/all.csv
-    countries = pd.read_csv("./all.csv")
+    countries = pd.read_csv("data/clean/all.csv")
     dict_distances = countries.set_index('name')['alpha-3'].to_dict()
     code.update(dict_distances)
     return code

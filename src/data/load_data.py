@@ -1,15 +1,12 @@
 import os
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import warnings
 import tarfile
-import io
 import tqdm
 import csv
 import gzip
 import shutil
 from datetime import datetime
+from ..utils.data_utils import merge_reviews, merge_breweries
 
 def load_data(path, bool_load_txt = False):
     """
@@ -139,3 +136,17 @@ def merge_ratings_breweries(ratings_df, breweries_df):
     merged_df = merged_df[columns_to_keep]
     merged_df = merged_df.drop(columns='_merge')
     return merged_df
+
+def load_all_usa_data():
+
+    ba_usa_ratings = get_beer_merged('data/clean/BeerAdvocate')
+    rb_usa_ratings = get_beer_merged('data/clean/RateBeer')
+    matched_usa_ratings = pd.read_csv("data/clean/MatchedBeerData/ratings.csv")
+    breweries_ba = load_breweries('data/clean/BeerAdvocate')
+    breweries_rb = load_breweries('data/clean/RateBeer')
+    breweries_matched = load_breweries('data/clean/MatchedBeerData')
+
+    usa_ratings = merge_reviews(ba_usa_ratings, rb_usa_ratings, matched_usa_ratings)
+    breweries = merge_breweries(breweries_ba, breweries_rb, breweries_matched)
+
+    return usa_ratings, breweries
