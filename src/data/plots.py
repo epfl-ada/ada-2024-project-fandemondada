@@ -311,3 +311,21 @@ def plot_average_distance_year(usa_ratings_merged):
     plt.ylabel('Average Distance (km)')
     plt.xticks(ticks=range(2000, average_distance_per_year.index.max() + 1), rotation=45)
     plt.show()
+
+def plot_distance_and_data(usa_ratings_merged, add_data, column_name, label):
+    usa_ratings_merged['year'] = usa_ratings_merged['year_month'].dt.year
+    average_distance_per_year = usa_ratings_merged.groupby('year')['distance'].mean()
+    average_distance_per_year = average_distance_per_year[average_distance_per_year.index >= 2000] #only take data after 2000 (too few points before)
+
+    plt.plot(average_distance_per_year.index, average_distance_per_year)
+    plt.title('Average Distance traveled by rated beers')
+    plt.xlabel('Year')
+    plt.ylabel('Average Distance (km)')
+    plt.xticks(ticks=range(2000, average_distance_per_year.index.max() + 1), rotation=45)
+
+    new_ax = plt.gca().twinx()
+    new_ax.plot(add_data['year'], add_data[column_name], color='r')
+    new_ax.set_ylabel(label, color='r')
+    new_ax.tick_params(axis='y', labelcolor='r')
+
+    plt.show()
