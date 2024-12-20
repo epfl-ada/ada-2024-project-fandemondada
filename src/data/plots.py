@@ -5,6 +5,7 @@ import pandas as pd
 from src.data.state_counts import get_counts_for_state_matrix, get_state_adjacency_matrix
 import seaborn as sns
 import plotly.graph_objects as go
+import math
 
 def plot_provenance(
         ratings_breweries_merged, 
@@ -231,3 +232,82 @@ def generate_choropleth_map(dataframe, code, column_to_plot, plot_title, legend)
 
     fig = go.Figure(data=[choropleth, choropleth2], layout=layout)
     fig.show()
+
+
+def plot_breweries_evolution(cum_brew):
+    fig, ax = plt.subplots(1, 1)
+    cum_brew.plot(y= ['cumulative_US', 'cumulative_World'], ax=ax, label=['US', 'World'])
+    ax.set_xlabel('Time')
+
+    ax.legend()
+
+    ax2 = ax.twinx()  # instantiate a second Axes that shares the same x-axis
+    cum_brew.plot(y= ['frac'], ax=ax2, color='g')
+    ax2.set_ylabel('Fraction of US breweries', color='g')  # we already handled the x-label with ax1
+    ax2.tick_params(axis='y', labelcolor='g')
+
+    ax.set_ylabel("Number of breweries")
+
+    plt.show()
+
+def plot_breweries_per_state(brew_dic):
+    num_states = len(brew_dic)
+    cols = 5
+    rows = math.ceil(num_states / cols)
+
+    fig, axs = plt.subplots(rows, cols, figsize=(20, 4 * rows))
+    axs = axs.flatten()
+
+    for i, (state, df) in enumerate(brew_dic.items()):
+        #monthly_avg = df.groupby('year_month')['distance'].mean()
+        df.plot(drawstyle="steps", y= ['cumulative'], ax=axs[i], linestyle='-')
+        axs[i].set_title(f"{state}")
+        axs[i].set_xlabel("Year")
+        axs[i].set_ylabel("Number of breweries")
+        axs[i].tick_params(axis='x', rotation=45)
+
+        ax2 = axs[i].twinx()  # instantiate a second Axes that shares the same x-axis
+        df.plot(y= ['count'], ax=ax2, color='g')
+        ax2.set_ylabel('New in that period', color='g')  # we already handled the x-label with ax1
+        ax2.tick_params(axis='y', labelcolor='g')
+
+
+    plt.tight_layout()
+    plt.show()
+
+def plot_distance_per_state(user_state_dic, new_brew_state_dic):
+    num_states = len(user_state_dic)
+    cols = 5
+    rows = math.ceil(num_states / cols)
+
+    fig, axs = plt.subplots(rows, cols, figsize=(20, 4 * rows))
+    axs = axs.flatten()
+
+    for i, (state, df) in enumerate(user_state_dic.items()):
+        monthly_avg = df.groupby('year_month')['distance'].mean()
+        monthly_avg.plot(ax=axs[i], linestyle='-')
+        axs[i].set_title(f"{state}")
+        axs[i].set_xlabel("Year")
+        axs[i].set_ylabel("Average Distance (km)")
+        axs[i].tick_params(axis='x', rotation=45)
+
+        ax2 = axs[i].twinx()
+        # new brweries in that state
+        new_brew_state_dic[state].plot(drawstyle="steps", y=['cumulative'], ax=ax2, linestyle='-', color='g')
+        ax2.set_ylabel('Number of breweries', color='g')  # we already handled the x-label with ax1
+        ax2.tick_params(axis='y', labelcolor='g')
+
+    plt.tight_layout()
+    plt.show()
+
+def plot_average_distance_year(usa_ratings_merged):
+    usa_ratings_merged['year'] = usa_ratings_merged['year_month'].dt.year
+    average_distance_per_year = usa_ratings_merged.groupby('year')['distance'].mean()
+    average_distance_per_year = average_distance_per_year[average_distance_per_year.index >= 2000] #only take data after 2000 (too few points before)
+
+    plt.plot(average_distance_per_year.index, average_distance_per_year)
+    plt.title('Average Distance traveled by rated beers')
+    plt.xlabel('Year')
+    plt.ylabel('Average Distance (km)')
+    plt.xticks(ticks=range(2000, average_distance_per_year.index.max() + 1), rotation=45)
+    plt.show()
