@@ -148,5 +148,3 @@ def convert_dict_to_table(dict):
     # fill not needed distances with 0
     distance_table = distance_table.fillna(0)
     return distance_table
-
-
