@@ -1,6 +1,5 @@
 import os
 import warnings
-
 import pandas as pd
 
 common_replacements = {
@@ -20,9 +19,9 @@ def clean_data(data_path, clean_load=False):
     """
     clean_dataset(data_path, 'BeerAdvocate', clean_load=clean_load,)
     
-    #clean_dataset(data_path, 'Ratebeer', clean_load=clean_load,)
+    clean_dataset(data_path, 'Ratebeer', clean_load=clean_load,)
     
-    #clean_dataset(data_path, 'Matched', clean_load=clean_load)
+    clean_dataset(data_path, 'Matched', clean_load=clean_load)
 
 def clean_dataset(data_path, dataset_name, clean_load=False):
     """

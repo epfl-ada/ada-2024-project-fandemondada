@@ -1,4 +1,4 @@
-# Favoring local beers: a study on the evolution of american beer consumption
+# Uncovering the shift in beer consumption trends: a deep dive into the journey of beer, from its place of brewing to your glass
 ## Abstract: 
 In this project, we aim to explore how beer consumption in the United States reflect broader societal trends by leveraging user-generated beer reviews. Specifically, we will look into the evolution of the distance between the place of brewing and the place of consumption of the beer.
 

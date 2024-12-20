@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from src.data.state_counts import get_counts_for_state_matrix, get_state_adjacency_matrix
 import seaborn as sns
+import plotly.graph_objects as go
 
 def plot_provenance(
         ratings_breweries_merged, 
@@ -120,3 +121,113 @@ def plot_monthly_country_counts(
     plt.xlabel(xlabel)
     plt.tight_layout()
     plt.show()
+
+def get_countries_code():
+    """ Generates a dictionnary with all countries code
+    Output:
+        - code: a dictionnary with all countries code
+    """
+
+    # get all locations code
+    code = {'Alabama': 'AL',
+            'Alaska': 'AK',
+            'Arizona': 'AZ',
+            'Arkansas': 'AR',
+            'California': 'CA',
+            'Colorado': 'CO',
+            'Connecticut': 'CT',
+            'Delaware': 'DE',
+            'District of Columbia': 'DC',
+            'Florida': 'FL',
+            'Georgia': 'GA',
+            'Hawaii': 'HI',
+            'Idaho': 'ID',
+            'Illinois': 'IL',
+            'Indiana': 'IN',
+            'Iowa': 'IA',
+            'Kansas': 'KS',
+            'Kentucky': 'KY',
+            'Louisiana': 'LA',
+            'Maine': 'ME',
+            'Maryland': 'MD',
+            'Massachusetts': 'MA',
+            'Michigan': 'MI',
+            'Minnesota': 'MN',
+            'Mississippi': 'MS',
+            'Missouri': 'MO',
+            'Montana': 'MT',
+            'Nebraska': 'NE',
+            'Nevada': 'NV',
+            'New Hampshire': 'NH',
+            'New Jersey': 'NJ',
+            'New Mexico': 'NM',
+            'New York': 'NY',
+            'North Carolina': 'NC',
+            'North Dakota': 'ND',
+            'Ohio': 'OH',
+            'Oklahoma': 'OK',
+            'Oregon': 'OR',
+            'Pennsylvania': 'PA',
+            'Rhode Island': 'RI',
+            'South Carolina': 'SC',
+            'South Dakota': 'SD',
+            'Tennessee': 'TN',
+            'Texas': 'TX',
+            'Utah': 'UT',
+            'Vermont': 'VT',
+            'Virginia': 'VA',
+            'Washington': 'WA',
+            'West Virginia': 'WV',
+            'Wisconsin': 'WI',
+            'Wyoming': 'WY'}
+
+    # source of the file "all.csv" with all the country codes: https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes/blob/master/all/all.csv
+    countries = pd.read_csv("./all.csv")
+    dict_distances = countries.set_index('name')['alpha-3'].to_dict()
+    code.update(dict_distances)
+    return code
+
+def generate_choropleth_map(dataframe, code, column_to_plot, plot_title, legend):
+    """ Generates an interactive choropleth map of the world and the US States
+    Input:
+        - dataframe: a pandas dataframe with the data that we want to plot
+        - code: a dictionnary with all countries code
+        - column to plot: the name of the column with the data we want to plot
+        - plot_title: the title of the plot
+        - legend: the legend of the plot
+    """
+    dataframe["Code"] = dataframe['location'].map(code)
+    countries = dataframe["Code"]
+    values = dataframe[column_to_plot]
+
+    choropleth = go.Choropleth(
+        locations=countries,         
+        z=values,                   
+        locationmode='ISO-3', 
+        colorscale='plasma',        
+        colorbar_title=legend,  
+        hoverinfo="location+z",
+    )
+
+    choropleth2 = go.Choropleth(
+        locations=countries,         
+        z=values,                    
+        locationmode='USA-states', 
+        colorscale='plasma',         
+        colorbar_title=legend,  
+        hoverinfo="location+z",
+    )
+
+    layout = go.Layout(
+        title=plot_title,
+        geo=dict(
+            showland=True,            
+            landcolor="white",        
+            projection_type="natural earth",  
+            showcountries=True,   
+            countrycolor="Black",  
+        ),
+    )
+
+    fig = go.Figure(data=[choropleth, choropleth2], layout=layout)
+    fig.show()
