@@ -1,4 +1,5 @@
 # Uncovering the shift in beer consumption trends: a deep dive into the journey of beer, from its place of brewing to your glass
+### Link to the datastory: [(link)](https://vassiliycheremetiev.github.io/datastory/)
 ## Abstract: 
 In this project, we aim to explore how beer consumption in the United States reflect broader societal trends by leveraging user-generated beer reviews. Specifically, we will look into the evolution of the distance between the place of brewing and the place of consumption of the beer.
 
@@ -64,4 +65,11 @@ For each task, a team member will oversee it. He will delegates subtasks to othe
 
 | Vassiliy Cheremetiev        | Patrick Gilliard      | Felix Schmeding            | John Taylor | Alex Zanetta            |
 |-----------------------------|-----------------------|----------------------------|-------------|-------------------|
-| Statewise local consumption | Datastory and Website | Explanation of the results | Homework 2  | Distance evolution |
+| Statewise local consumption | Datastory and Website | Explanation of the results | Homework 2  | Distance evolution 
+
+## Contribution:
+
+| Vassiliy Cheremetiev        | Patrick Gilliard      | Felix Schmeding            | John Taylor | Alex Zanetta            |
+|-----------------------------|-----------------------|----------------------------|-------------|-------------------|
+| Merging of the dataframes, locality of beer consumption, distance distribution, datastory | Interactive map, cleaning of the code | Evolution of the number of breweries, modelling of the correlations of the reviews between states (previous idea) | Wrangling, heat maps  | Loadind the data, computing and mapping of breweries and user distribution, computing the distances, datastory
+
