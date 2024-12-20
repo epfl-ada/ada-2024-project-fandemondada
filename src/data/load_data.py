@@ -107,6 +107,8 @@ def load_breweries(data_path):
         breweries.loc[breweries['location'].str.contains('Newfoundland and Labrador'), 'location'] = 'Canada'
         breweries.loc[breweries['location'].str.contains('United Kingdom, '), 'location'] = 'United Kingdom'
         breweries = breweries.rename(columns={'id': 'brewery_id'})
+        if 'BeerAdvocate' in data_path:
+            breweries = breweries[~breweries['state'].str.contains("<a href")]
     return breweries
 
 def get_beer_merged(data_path):
@@ -118,15 +120,6 @@ def get_beer_merged(data_path):
     usa_ratings['date'] = usa_ratings['date'].apply(lambda timestamp: datetime.fromtimestamp(timestamp).date())
     # datetime.fromtimestamp(timestamp) 
     return usa_ratings
-
-def get_matched_beer_merged():
-    matched_usa_ratings = pd.read_csv("data/clean/MatchedBeerData/ratings.csv")
-    matched_usa_users = pd.read_csv("data/clean/MatchedBeerData/usa_users.csv")
-
-    matched_usa_ratings = matched_usa_ratings.merge(matched_usa_users[['user_id', 'location']], on='user_id', how='left')
-    matched_usa_ratings['state'] = matched_usa_ratings['location'].apply(lambda x: x.split(', ')[-1])
-    matched_usa_ratings['date'] = matched_usa_ratings['date'].apply(lambda timestamp: datetime.fromtimestamp(timestamp).date())
-    return matched_usa_ratings
 
 def get_states_from_df(df):
     """
@@ -141,5 +134,4 @@ def merge_ratings_breweries(ratings_df, breweries_df):
     """
     merged_df = ratings_df.merge(breweries_df[['brewery_id', 'state']], on='brewery_id', how='left')
     merged_df = merged_df.rename(columns={'state_x': 'user_state', 'state_y': 'brewery_state'})
-    merged_df = merged_df[~merged_df["brewery_state"].str.contains("<a href")]
     return merged_df
